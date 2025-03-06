@@ -1,5 +1,5 @@
 
-export type ServiceType = 'printing' | 'binding' | 'logistics' | 'eco-printing';
+export type ServiceType = 'printing' | 'binding' | 'logistics' | 'eco-printing' | 'sdgs-consulting' | 'sustainability-report';
 
 export type PrintSpecs = {
   serviceType: ServiceType;
@@ -24,6 +24,21 @@ export type PrintSpecs = {
   ecoMaterials?: string[];
   carbonOffset?: boolean;
   certifications?: string[];
+  // SDGsコンサルティング特有のフィールド
+  companySize?: string;
+  industryType?: string;
+  currentSdgsInitiatives?: string[];
+  targetGoals?: string[];
+  consultingScope?: string;
+  // サステナビリティレポート特有のフィールド
+  reportType?: string;
+  reportLength?: number;
+  includedData?: string[];
+  designComplexity?: string;
+  previousReports?: boolean;
+  // ファイルアップロード
+  uploadedFiles?: File[];
+  fileUrls?: string[];
 }
 
 export type QuoteDetails = {
@@ -39,4 +54,6 @@ export type ChatMessage = {
   content: string;
   sender: 'user' | 'ai';
   timestamp: Date;
+  attachments?: string[]; // URLs to attached files
+  relatedTo?: string; // Reference to a specific form field the message is about
 }

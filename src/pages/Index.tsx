@@ -4,13 +4,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Header from '@/components/Header';
 import PrintForm from '@/components/PrintForm';
 import QuoteDetails from '@/components/QuoteDetails';
+import AIChat from '@/components/AIChat';
 import { QuoteDetails as QuoteDetailsType, ServiceType } from '@/types';
 import { FileText, MessageSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 const Index = () => {
-  const [activeTab, setActiveTab] = useState<string>('form');
+  const [activeTab, setActiveTab] = useState<string>('chat');
   const [quote, setQuote] = useState<QuoteDetailsType | null>(null);
   const [selectedService, setSelectedService] = useState<ServiceType>('printing');
   
@@ -21,7 +22,7 @@ const Index = () => {
   
   const handleNewQuote = () => {
     setQuote(null);
-    setActiveTab('form');
+    setActiveTab('chat');
   };
 
   return (
@@ -39,7 +40,7 @@ const Index = () => {
                 スマートな印刷見積もり
               </h1>
               <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-                最新技術で印刷業務をもっと簡単に。正確な見積もりですばやく対応します。
+                AIとの対話で簡単に見積もり。正確な見積もりをAIとの会話でスムーズに取得できます。
               </p>
             </div>
           </section>
@@ -53,21 +54,43 @@ const Index = () => {
               <div className="flex justify-center mb-8">
                 <TabsList className="grid grid-cols-2 w-full max-w-md">
                   <TabsTrigger 
-                    value="form"
-                    className="flex items-center gap-2 py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all duration-300"
-                  >
-                    <FileText className="h-4 w-4" />
-                    見積もりフォーム
-                  </TabsTrigger>
-                  <TabsTrigger 
                     value="chat"
                     className="flex items-center gap-2 py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all duration-300"
                   >
                     <MessageSquare className="h-4 w-4" />
                     AIチャット
                   </TabsTrigger>
+                  <TabsTrigger 
+                    value="form"
+                    className="flex items-center gap-2 py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all duration-300"
+                  >
+                    <FileText className="h-4 w-4" />
+                    見積もりフォーム
+                  </TabsTrigger>
                 </TabsList>
               </div>
+              
+              <TabsContent 
+                value="chat" 
+                className={cn(
+                  "mt-0 focus-visible:outline-none focus-visible:ring-0",
+                  "data-[state=active]:animate-fade-in"
+                )}
+              >
+                <div className="flex flex-col items-center justify-center w-full">
+                  <div className="w-full max-w-3xl">
+                    <div className="bg-card rounded-lg shadow-md border border-border/60 overflow-hidden">
+                      <div className="p-6">
+                        <h2 className="text-xl font-semibold mb-2">AIと会話して見積もり作成</h2>
+                        <p className="text-muted-foreground mb-6">
+                          質問に答えるだけで、最適な印刷見積もりを提案します。特別な要件や質問があればお気軽にどうぞ。
+                        </p>
+                        <AIChat onQuoteGenerated={handleQuoteGenerated} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </TabsContent>
               
               <TabsContent 
                 value="form" 

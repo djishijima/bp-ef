@@ -1,5 +1,8 @@
 
+export type ServiceType = 'printing' | 'binding' | 'logistics' | 'eco-printing';
+
 export type PrintSpecs = {
+  serviceType: ServiceType;
   productType: string;
   size: string;
   quantity: number;
@@ -9,6 +12,18 @@ export type PrintSpecs = {
   customSpecs?: string;
   deliveryDate?: Date;
   deliveryAddress?: string;
+  // 製本特有のフィールド
+  bindingType?: string;
+  pageCount?: number;
+  coverType?: string;
+  // 物流特有のフィールド
+  weight?: number;
+  dimensions?: string;
+  deliverySpeed?: string;
+  // 環境印刷特有のフィールド
+  ecoMaterials?: string[];
+  carbonOffset?: boolean;
+  certifications?: string[];
 }
 
 export type QuoteDetails = {

@@ -46,21 +46,6 @@ const Header = () => {
         
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-4">
-          <nav className="flex items-center mr-4">
-            <a 
-              href="#form" 
-              className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors"
-            >
-              見積もりフォーム
-            </a>
-            <Link 
-              to="/my-page" 
-              className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors ml-6"
-            >
-              マイページ
-            </Link>
-          </nav>
-          
           <Button 
             variant="default"
             className="whitespace-nowrap"
@@ -89,20 +74,6 @@ const Header = () => {
       {mobileMenuOpen && (
         <div className="md:hidden bg-background border-b border-border/60 px-4 py-5 animate-in slide-in-from-top">
           <nav className="flex flex-col space-y-4">
-            <a 
-              href="#form" 
-              className="text-sm font-medium py-2 hover:text-primary transition-colors"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              見積もりフォーム
-            </a>
-            <Link
-              to="/my-page"
-              className="text-sm font-medium py-2 hover:text-primary transition-colors"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              マイページ
-            </Link>
             <Button 
               className="w-full mt-2"
               onClick={() => setMobileMenuOpen(false)}

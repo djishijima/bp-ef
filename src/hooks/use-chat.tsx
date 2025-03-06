@@ -1,8 +1,9 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ChatMessage, QuoteDetails, ServiceType } from '@/types';
 import { generateAIResponse, isApiKeySet } from '@/services/ai';
 import { useToast } from '@/hooks/use-toast';
+import { saveChatLog } from '@/utils/logManager';
 
 // Define the welcome messages
 const welcomeMessages = {
@@ -39,11 +40,24 @@ export function useChat({
   const [isTyping, setIsTyping] = useState(false);
   const [language, setLanguage] = useState<'ja' | 'en' | 'zh' | 'ko'>('ja');
   const { toast } = useToast();
+  const [currentServiceType, setCurrentServiceType] = useState<ServiceType>('printing');
+  const [quoteGenerated, setQuoteGenerated] = useState(false);
+  const chatEndedRef = useRef(false);
 
   // Check if API key is set
   useEffect(() => {
     setIsApiConfigured(initialApiConfigured || isApiKeySet());
   }, [initialApiConfigured]);
+
+  // チャットが終了したときにログを保存する
+  useEffect(() => {
+    return () => {
+      if (messages.length > 1 && !chatEndedRef.current) {
+        chatEndedRef.current = true;
+        saveChatLog(messages, currentServiceType, quoteGenerated);
+      }
+    };
+  }, [messages, currentServiceType, quoteGenerated]);
 
   // Function to detect service type from message
   const detectServiceType = (message: string): ServiceType => {
@@ -94,6 +108,7 @@ export function useChat({
     try {
       // サービスタイプを検出
       const serviceType = detectServiceType(inputText);
+      setCurrentServiceType(serviceType);
       
       // サービスタイプが検出されたら親コンポーネントに通知
       if (onServiceSelect) {
@@ -131,6 +146,7 @@ export function useChat({
           turnaround: 5
         };
         
+        setQuoteGenerated(true);
         onQuoteGenerated(sampleQuote);
       }
     } catch (error) {
@@ -156,6 +172,17 @@ export function useChat({
     }
   };
 
+  // 手動でログを保存する関数
+  const saveCurrentChat = () => {
+    if (messages.length > 1) {
+      saveChatLog(messages, currentServiceType, quoteGenerated);
+      toast({
+        title: "保存完了",
+        description: "会話履歴がマイページに保存されました。",
+      });
+    }
+  };
+
   // Change language function
   const changeLanguage = (lang: 'ja' | 'en' | 'zh' | 'ko') => {
     setLanguage(lang);
@@ -171,6 +198,11 @@ export function useChat({
 
   // Clear chat function
   const clearChat = () => {
+    // 現在の会話が1メッセージ以上あれば保存
+    if (messages.length > 1) {
+      saveChatLog(messages, currentServiceType, quoteGenerated);
+    }
+    
     setMessages([
       {
         id: Date.now().toString(),
@@ -179,6 +211,7 @@ export function useChat({
         timestamp: new Date(),
       },
     ]);
+    setQuoteGenerated(false);
   };
 
   // Export chat history function
@@ -243,6 +276,7 @@ export function useChat({
     changeLanguage,
     clearChat,
     exportChatHistory,
-    handleApiConfigured
+    handleApiConfigured,
+    saveCurrentChat
   };
 }

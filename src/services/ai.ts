@@ -4,6 +4,8 @@ import { ChatMessage } from '@/types';
 
 // API Keyの一時保存用
 let tempApiKey: string | null = null;
+// Google Maps API Key
+export const GOOGLE_MAPS_API_KEY = "AIzaSyDYjjdUxlyXTNHz9R9BZaF-VdhKpoX2jgQ";
 
 export const setApiKey = (key: string) => {
   tempApiKey = key;

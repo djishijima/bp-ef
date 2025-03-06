@@ -1,13 +1,10 @@
 
+import React, { useState, useEffect } from 'react';
 import {
   Toast,
   ToastActionElement,
   ToastProps,
 } from "@/components/ui/toast"
-
-import {
-  useToast as useToastPrimitive,
-} from "@radix-ui/react-toast"
 
 const TOAST_LIMIT = 5
 const TOAST_REMOVE_DELAY = 5000
@@ -166,11 +163,9 @@ export function toast({
 }
 
 export function useToast() {
-  const { ...toastContext } = useToastPrimitive()
-  
-  const [state, setState] = React.useState<State>(memoryState)
+  const [state, setState] = useState<State>(memoryState)
 
-  React.useEffect(() => {
+  useEffect(() => {
     listeners.push(setState)
     return () => {
       const index = listeners.indexOf(setState)
@@ -181,7 +176,6 @@ export function useToast() {
   }, [state])
 
   return {
-    ...toastContext,
     toast,
     toasts: state.toasts as ToasterToast[],
   }

@@ -1,0 +1,29 @@
+
+/* Fix for service selector overflow */
+.service-selector-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.service-selector-container::-webkit-scrollbar {
+  height: 3px;
+}
+
+.service-selector-container::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+}
+
+.service-selector-container::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+/* Responsive container fixes */
+@media (max-width: 640px) {
+  .container {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+}

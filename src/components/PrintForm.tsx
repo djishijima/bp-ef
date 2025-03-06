@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from 'react';
 import { 
   Card, 
@@ -59,7 +58,6 @@ const PrintForm = ({ onQuoteGenerated, serviceType, onAskAI }: PrintFormProps) =
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
   const [showFieldHelp, setShowFieldHelp] = useState<string | null>(null);
   
-  // Reset form when service type changes
   useEffect(() => {
     setSpecs(prev => ({
       ...prev,
@@ -83,9 +81,8 @@ const PrintForm = ({ onQuoteGenerated, serviceType, onAskAI }: PrintFormProps) =
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
     
-    if (!specs.productType) newErrors.productType = '商品タイプを選択してください';
+    if (!specs.productType) newErrors.productType = '商品タイプを���択してください';
     
-    // サービスタイプごとの必須フィールド検証
     if (serviceType === 'printing' || serviceType === 'eco-printing') {
       if (!specs.size) newErrors.size = 'サイズを選択してください';
       if (!specs.quantity || specs.quantity < 1) newErrors.quantity = '有効な数量を入力してください';
@@ -115,7 +112,6 @@ const PrintForm = ({ onQuoteGenerated, serviceType, onAskAI }: PrintFormProps) =
   const handleInputChange = (field: keyof PrintSpecs, value: any) => {
     setSpecs(prev => ({ ...prev, [field]: value }));
     
-    // Clear error for this field if it exists
     if (errors[field]) {
       setErrors(prev => {
         const newErrors = { ...prev };
@@ -148,17 +144,15 @@ const PrintForm = ({ onQuoteGenerated, serviceType, onAskAI }: PrintFormProps) =
     const files = Array.from(e.target.files);
     setUploadedFiles(prevFiles => [...prevFiles, ...files]);
     
-    // Create preview URLs for images
     const newFileUrls = files.map(file => {
       if (file.type.startsWith('image/')) {
         return URL.createObjectURL(file);
       }
-      return ''; // Placeholder for non-image files
+      return '';
     });
     
     setPreviewUrls(prevUrls => [...prevUrls, ...newFileUrls.filter(url => url)]);
     
-    // Update specs
     setSpecs(prev => ({
       ...prev,
       uploadedFiles: [...(prev.uploadedFiles || []), ...files],
@@ -206,13 +200,11 @@ const PrintForm = ({ onQuoteGenerated, serviceType, onAskAI }: PrintFormProps) =
     
     setIsGeneratingQuote(true);
     
-    // Update specs with delivery date if selected
     const updatedSpecs = { ...specs };
     if (date) {
       updatedSpecs.deliveryDate = date;
     }
     
-    // Simulate API call with timeout
     setTimeout(() => {
       const quote = calculateQuote(updatedSpecs);
       onQuoteGenerated(quote);
@@ -225,7 +217,6 @@ const PrintForm = ({ onQuoteGenerated, serviceType, onAskAI }: PrintFormProps) =
     }, 1500);
   };
 
-  // サービスタイプごとのフォームフィールドをレンダリングする
   const renderServiceTypeFields = () => {
     switch (serviceType) {
       case 'printing':
@@ -796,7 +787,6 @@ const PrintForm = ({ onQuoteGenerated, serviceType, onAskAI }: PrintFormProps) =
   const renderEcoPrintingFields = () => {
     return (
       <>
-        {/* 通常の印刷フィールドを含める */}
         {renderPrintingFields()}
         
         <Separator />
@@ -1367,7 +1357,7 @@ const PrintForm = ({ onQuoteGenerated, serviceType, onAskAI }: PrintFormProps) =
 
   return (
     <Card className="w-full max-w-2xl mx-auto shadow-lg animate-fade-in transition-all duration-300 hover:shadow-xl">
-      <CardHeader>
+      <CardHeader className="text-center">
         <CardTitle className="text-xl font-semibold">
           {serviceType === 'printing' && '印刷仕様入力'}
           {serviceType === 'binding' && '製本仕様入力'}
@@ -1376,7 +1366,7 @@ const PrintForm = ({ onQuoteGenerated, serviceType, onAskAI }: PrintFormProps) =
           {serviceType === 'sdgs-consulting' && 'SDGsコンサルティング仕様入力'}
           {serviceType === 'sustainability-report' && 'サステナビリティレポート仕様入力'}
         </CardTitle>
-        <CardDescription>お見積りに必要な情報を入力してください</CardDescription>
+        <CardDescription className="text-center">お見積りに必要な情報を入力してください</CardDescription>
       </CardHeader>
       
       <CardContent className="space-y-6">
@@ -1385,9 +1375,8 @@ const PrintForm = ({ onQuoteGenerated, serviceType, onAskAI }: PrintFormProps) =
           
           <Separator />
           
-          {/* ファイルアップロードセクション */}
           <div className="space-y-2">
-            <Label htmlFor="file-upload">参考ファイル（オプション）</Label>
+            <Label htmlFor="file-upload" className="text-center block">参考ファイル（オプション）</Label>
             <div className="flex items-center gap-2">
               <Input
                 id="file-upload"
@@ -1453,7 +1442,7 @@ const PrintForm = ({ onQuoteGenerated, serviceType, onAskAI }: PrintFormProps) =
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="customSpecs">特記事項 (オプション)</Label>
+            <Label htmlFor="customSpecs" className="text-center block">特記事項 (オプション)</Label>
             <Textarea
               id="customSpecs"
               placeholder="その他の条件や特記事項があればご記入ください"
@@ -1464,7 +1453,7 @@ const PrintForm = ({ onQuoteGenerated, serviceType, onAskAI }: PrintFormProps) =
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="deliveryDate">希望納期 (オプション)</Label>
+            <Label htmlFor="deliveryDate" className="text-center block">希望納期 (オプション)</Label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button

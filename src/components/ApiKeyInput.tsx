@@ -40,7 +40,7 @@ const ApiKeyInput = ({ onKeySet }: ApiKeyInputProps) => {
 
   return (
     <Card className="w-full">
-      <CardHeader>
+      <CardHeader className="text-center">
         <CardTitle className="text-xl">Google Gemini API設定</CardTitle>
         <CardDescription>
           AIアシスタント機能を有効にするには、Google Gemini APIキーが必要です。
@@ -70,7 +70,7 @@ const ApiKeyInput = ({ onKeySet }: ApiKeyInputProps) => {
           </Button>
         </form>
       </CardContent>
-      <CardFooter className="text-xs text-muted-foreground">
+      <CardFooter className="text-xs text-muted-foreground text-center">
         APIキーはあなたのブラウザのlocalStorageに保存されます。サーバーに送信されることはありません。
       </CardFooter>
     </Card>

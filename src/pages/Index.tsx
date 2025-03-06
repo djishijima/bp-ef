@@ -40,32 +40,32 @@ const Index = () => {
     <div className="min-h-screen flex flex-col bg-gray-50 w-full">
       <Header />
       
-      <main className="flex-1 pt-24 pb-16 w-full">
-        <div className="container max-w-7xl mx-auto px-4 md:px-6">
-          <section className="mb-12 text-center animate-fade-in">
+      <main className="flex-1 px-4 py-8 md:py-16 w-full overflow-x-hidden">
+        <div className="container mx-auto">
+          <section className="mb-8 text-center animate-fade-in">
             <div className="max-w-3xl mx-auto">
               <span className="inline-block px-3 py-1 bg-secondary rounded-full text-xs font-medium text-secondary-foreground mb-4">
                 印刷業界向けAIソリューション
               </span>
-              <h1 className="text-4xl md:text-5xl font-bold leading-tight tracking-tight mb-6">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight tracking-tight mb-4">
                 スマートな印刷見積もり
               </h1>
-              <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+              <p className="text-md md:text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
                 AIとの対話で簡単に見積もり。正確な見積もりをAIとの会話でスムーズに取得できます。
               </p>
             </div>
           </section>
           
           <section className="relative" id="quote-generation">
-            <div className="flex flex-col lg:flex-row gap-6 lg:gap-10">
+            <div className="flex flex-col lg:flex-row gap-8">
               {/* AIチャット部分 */}
               <div className="w-full lg:w-1/2 animate-fade-in">
-                <div className="bg-card rounded-lg shadow-md border border-border/60 overflow-hidden h-full">
-                  <div className="p-6">
-                    <h2 className="text-xl font-semibold mb-2">AIと会話して見積もり作成</h2>
-                    <p className="text-muted-foreground mb-6">
-                      質問に答えるだけで、最適な印刷見積もりを提案します。特別な要件や質問があればお気軽にどうぞ。
-                    </p>
+                <div className="bg-card rounded-lg shadow-md border border-border/60 p-4 md:p-6">
+                  <h2 className="text-xl font-semibold mb-2">AIと会話して見積もり作成</h2>
+                  <p className="text-muted-foreground mb-4">
+                    質問に答えるだけで、最適な印刷見積もりを提案します。特別な要件や質問があればお気軽にどうぞ。
+                  </p>
+                  <div className="mx-auto">
                     <AIChat 
                       onQuoteGenerated={handleQuoteGenerated} 
                       onServiceSelect={handleServiceSelect}
@@ -81,11 +81,11 @@ const Index = () => {
                 {quote ? (
                   <QuoteDetails quote={quote} onNewQuote={handleNewQuote} />
                 ) : (
-                  <>
+                  <div className="bg-card rounded-lg shadow-md border border-border/60 p-4 md:p-6">
                     <div className="mb-6">
-                      <div className="mb-6 flex justify-center">
+                      <div className="mb-4 flex justify-center">
                         <div className="service-selector-container">
-                          <div className="inline-flex rounded-md border p-1 bg-muted/50 whitespace-nowrap">
+                          <div className="inline-flex rounded-md border p-1 bg-muted/50 whitespace-nowrap overflow-x-auto">
                             <Button 
                               variant={selectedService === 'printing' ? 'default' : 'ghost'} 
                               className="text-sm px-3"
@@ -136,7 +136,7 @@ const Index = () => {
                       onQuoteGenerated={handleQuoteGenerated} 
                       serviceType={selectedService}
                     />
-                  </>
+                  </div>
                 )}
               </div>
             </div>

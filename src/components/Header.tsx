@@ -36,32 +36,20 @@ const Header = () => {
       <div className="container max-w-7xl mx-auto px-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="w-10 h-10 rounded-md bg-primary flex items-center justify-center">
-            <span className="text-primary-foreground font-bold text-base">P</span>
+            <span className="text-primary-foreground font-bold text-base">文</span>
           </div>
           <h1 className="text-xl font-bold tracking-tight text-foreground">
-            PrintEstimatorAI
+            文唱堂印刷株式会社
           </h1>
         </div>
         
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-8">
           <a 
-            href="#features" 
+            href="#form" 
             className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors"
           >
-            特徴
-          </a>
-          <a 
-            href="#how-it-works" 
-            className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors"
-          >
-            ご利用方法
-          </a>
-          <a 
-            href="#pricing" 
-            className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors"
-          >
-            料金プラン
+            見積もりフォーム
           </a>
         </nav>
         
@@ -95,25 +83,11 @@ const Header = () => {
         <div className="md:hidden bg-background border-b border-border/60 px-4 py-5 animate-in slide-in-from-top">
           <nav className="flex flex-col space-y-4">
             <a 
-              href="#features" 
+              href="#form" 
               className="text-sm font-medium py-2 hover:text-primary transition-colors"
               onClick={() => setMobileMenuOpen(false)}
             >
-              特徴
-            </a>
-            <a 
-              href="#how-it-works" 
-              className="text-sm font-medium py-2 hover:text-primary transition-colors"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              ご利用方法
-            </a>
-            <a 
-              href="#pricing" 
-              className="text-sm font-medium py-2 hover:text-primary transition-colors"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              料金プラン
+              見積もりフォーム
             </a>
             <Button 
               className="w-full mt-2"

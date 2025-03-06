@@ -1,7 +1,7 @@
 
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { QuoteDetails, ServiceType } from '@/types';
-import ApiKeyInput from './ApiKeyInput';
+import ApiKeyInput from './chat/ApiKeyInput';
 import ChatHeader from './chat/ChatHeader';
 import ChatMessageList from './chat/ChatMessageList';
 import ChatInput from './chat/ChatInput';
@@ -42,7 +42,7 @@ const AIChat = ({
 
   // API設定が完了していない場合はAPIキー入力画面を表示
   if (!isApiConfigured) {
-    return <ApiKeyInput onKeySet={handleApiConfigured} />;
+    return <ApiKeyInput onKeySet={handleApiConfigured} language={language} />;
   }
 
   return (

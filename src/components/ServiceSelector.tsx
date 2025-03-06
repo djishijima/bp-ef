@@ -1,9 +1,10 @@
 
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { useState, useEffect } from 'react';
 import { ServiceType } from '@/types';
-import { Printer, BookOpen, Truck, Leaf } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Card, CardContent } from '@/components/ui/card';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
+import { Printer, BookOpen, Truck, Leaf, BarChart4, LineChart } from 'lucide-react';
 
 interface ServiceSelectorProps {
   selectedService: ServiceType;
@@ -11,58 +12,83 @@ interface ServiceSelectorProps {
 }
 
 const ServiceSelector = ({ selectedService, onServiceChange }: ServiceSelectorProps) => {
-  const services = [
-    { 
-      id: 'printing' as ServiceType, 
-      name: '印刷', 
-      icon: <Printer className="h-5 w-5" />,
-      description: '名刺、チラシ、ポスターなどの印刷サービス'
-    },
-    { 
-      id: 'binding' as ServiceType, 
-      name: '製本', 
-      icon: <BookOpen className="h-5 w-5" />,
-      description: '冊子、書籍、マニュアルなどの製本サービス'
-    },
-    { 
-      id: 'logistics' as ServiceType, 
-      name: '物流', 
-      icon: <Truck className="h-5 w-5" />,
-      description: '配送、梱包、保管などの物流サービス'
-    },
-    { 
-      id: 'eco-printing' as ServiceType, 
-      name: '環境印刷', 
-      icon: <Leaf className="h-5 w-5" />,
-      description: '環境に配慮した用紙・インクを使用する印刷サービス'
+  useEffect(() => {
+    // 初期選択を'printing'に設定
+    if (!selectedService) {
+      onServiceChange('printing');
     }
-  ];
+  }, [selectedService, onServiceChange]);
 
   return (
-    <div className="grid grid-cols-2 gap-3 w-full mb-6">
-      {services.map((service) => (
-        <Button
-          key={service.id}
-          type="button"
-          variant={selectedService === service.id ? "default" : "outline"}
-          className={cn(
-            "flex flex-col h-auto py-4 gap-2 transition-all duration-300",
-            selectedService === service.id 
-              ? "border-primary/30 bg-primary text-primary-foreground" 
-              : "hover:border-primary/30"
-          )}
-          onClick={() => onServiceChange(service.id)}
+    <Card className="w-full">
+      <CardContent className="pt-6">
+        <RadioGroup 
+          value={selectedService} 
+          onValueChange={(value) => onServiceChange(value as ServiceType)}
+          className="grid grid-cols-2 md:grid-cols-3 gap-4"
         >
-          <div className="flex items-center justify-center">
-            {service.icon}
-            <span className="ml-2 font-medium">{service.name}</span>
+          <div className="flex items-center justify-between space-x-2 border rounded-md p-4 hover:bg-muted/50 transition-colors">
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="printing" id="printing" />
+              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+                <Printer className="h-5 w-5 text-primary" />
+                <Label htmlFor="printing" className="font-medium">印刷</Label>
+              </div>
+            </div>
           </div>
-          <p className="text-xs font-normal opacity-80 line-clamp-2">
-            {service.description}
-          </p>
-        </Button>
-      ))}
-    </div>
+          
+          <div className="flex items-center justify-between space-x-2 border rounded-md p-4 hover:bg-muted/50 transition-colors">
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="binding" id="binding" />
+              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+                <BookOpen className="h-5 w-5 text-primary" />
+                <Label htmlFor="binding" className="font-medium">製本</Label>
+              </div>
+            </div>
+          </div>
+          
+          <div className="flex items-center justify-between space-x-2 border rounded-md p-4 hover:bg-muted/50 transition-colors">
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="logistics" id="logistics" />
+              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+                <Truck className="h-5 w-5 text-primary" />
+                <Label htmlFor="logistics" className="font-medium">物流</Label>
+              </div>
+            </div>
+          </div>
+          
+          <div className="flex items-center justify-between space-x-2 border rounded-md p-4 hover:bg-muted/50 transition-colors">
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="eco-printing" id="eco-printing" />
+              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+                <Leaf className="h-5 w-5 text-green-600" />
+                <Label htmlFor="eco-printing" className="font-medium">環境印刷</Label>
+              </div>
+            </div>
+          </div>
+          
+          <div className="flex items-center justify-between space-x-2 border rounded-md p-4 hover:bg-muted/50 transition-colors">
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="sdgs-consulting" id="sdgs-consulting" />
+              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+                <BarChart4 className="h-5 w-5 text-blue-600" />
+                <Label htmlFor="sdgs-consulting" className="font-medium">SDGsコンサルティング</Label>
+              </div>
+            </div>
+          </div>
+          
+          <div className="flex items-center justify-between space-x-2 border rounded-md p-4 hover:bg-muted/50 transition-colors">
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="sustainability-report" id="sustainability-report" />
+              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+                <LineChart className="h-5 w-5 text-teal-600" />
+                <Label htmlFor="sustainability-report" className="font-medium">サステナビリティレポート</Label>
+              </div>
+            </div>
+          </div>
+        </RadioGroup>
+      </CardContent>
+    </Card>
   );
 };
 

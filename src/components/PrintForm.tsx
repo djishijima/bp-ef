@@ -25,7 +25,19 @@ import { PrintSpecs, QuoteDetails, ServiceType, ChatMessage } from '@/types';
 import { calculateQuote } from '@/utils/printCalculator';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { CalendarIcon, Printer, Upload, HelpCircle, Info } from 'lucide-react';
+import { 
+  CalendarIcon, 
+  Printer, 
+  Upload, 
+  HelpCircle, 
+  Info, 
+  BookOpen, 
+  Truck, 
+  Leaf, 
+  BarChart4, 
+  LineChart,
+  FileText
+} from 'lucide-react';
 import { format } from 'date-fns';
 import { useToast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
@@ -1355,10 +1367,32 @@ const PrintForm = ({ onQuoteGenerated, serviceType, onAskAI }: PrintFormProps) =
     );
   };
 
+  const getServiceIcon = () => {
+    switch (serviceType) {
+      case 'printing':
+        return <Printer className="h-8 w-8 text-primary" />;
+      case 'binding':
+        return <BookOpen className="h-8 w-8 text-primary" />;
+      case 'logistics':
+        return <Truck className="h-8 w-8 text-primary" />;
+      case 'eco-printing':
+        return <Leaf className="h-8 w-8 text-green-600" />;
+      case 'sdgs-consulting':
+        return <BarChart4 className="h-8 w-8 text-blue-600" />;
+      case 'sustainability-report':
+        return <LineChart className="h-8 w-8 text-teal-600" />;
+      default:
+        return <FileText className="h-8 w-8 text-primary" />;
+    }
+  };
+
   return (
     <Card className="w-full max-w-2xl mx-auto shadow-lg animate-fade-in transition-all duration-300 hover:shadow-xl">
       <CardHeader className="text-center">
-        <CardTitle className="text-xl font-semibold">
+        <div className="flex flex-col items-center justify-center mb-2">
+          {getServiceIcon()}
+        </div>
+        <CardTitle className="text-xl font-semibold text-center">
           {serviceType === 'printing' && '印刷仕様入力'}
           {serviceType === 'binding' && '製本仕様入力'}
           {serviceType === 'logistics' && '物流仕様入力'}

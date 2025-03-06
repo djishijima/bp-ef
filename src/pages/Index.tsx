@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Header from '@/components/Header';
@@ -26,10 +25,10 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-gray-50 w-full">
       <Header />
       
-      <main className="flex-1 pt-24 pb-16">
+      <main className="flex-1 pt-24 pb-16 w-full">
         <div className="container max-w-7xl mx-auto px-4 md:px-6">
           <section className="mb-20 text-center animate-fade-in">
             <div className="max-w-3xl mx-auto">
@@ -42,7 +41,7 @@ const Index = () => {
               <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
                 最新技術で印刷業務をもっと簡単に。正確な見積もりと24時間対応のAIアシスタントで、お客様のニーズにすばやく対応します。
               </p>
-              <div className="flex items-center justify-center gap-4">
+              <div className="flex flex-wrap items-center justify-center gap-4">
                 <Button 
                   className="gap-2 px-5 py-6 font-medium transition-all duration-300"
                   onClick={() => setActiveTab('form')}
@@ -96,64 +95,68 @@ const Index = () => {
                   "data-[state=active]:animate-fade-in"
                 )}
               >
-                <div className="flex flex-col lg:flex-row gap-6 items-start justify-center">
+                <div className="flex flex-col items-center justify-center w-full">
                   <div className="w-full mb-6">
                     <div className="mb-6 flex justify-center">
-                      <div className="inline-flex rounded-md border p-1 bg-muted/50">
-                        <Button 
-                          variant={selectedService === 'printing' ? 'default' : 'ghost'} 
-                          className="text-sm px-3"
-                          onClick={() => setSelectedService('printing')}
-                        >
-                          印刷
-                        </Button>
-                        <Button 
-                          variant={selectedService === 'binding' ? 'default' : 'ghost'} 
-                          className="text-sm px-3"
-                          onClick={() => setSelectedService('binding')}
-                        >
-                          製本
-                        </Button>
-                        <Button 
-                          variant={selectedService === 'logistics' ? 'default' : 'ghost'} 
-                          className="text-sm px-3"
-                          onClick={() => setSelectedService('logistics')}
-                        >
-                          物流
-                        </Button>
-                        <Button 
-                          variant={selectedService === 'eco-printing' ? 'default' : 'ghost'} 
-                          className="text-sm px-3"
-                          onClick={() => setSelectedService('eco-printing')}
-                        >
-                          環境印刷
-                        </Button>
-                        <Button 
-                          variant={selectedService === 'sdgs-consulting' ? 'default' : 'ghost'} 
-                          className="text-sm px-3"
-                          onClick={() => setSelectedService('sdgs-consulting')}
-                        >
-                          SDGs
-                        </Button>
-                        <Button 
-                          variant={selectedService === 'sustainability-report' ? 'default' : 'ghost'} 
-                          className="text-sm px-3"
-                          onClick={() => setSelectedService('sustainability-report')}
-                        >
-                          サステナビリティ
-                        </Button>
+                      <div className="service-selector-container">
+                        <div className="inline-flex rounded-md border p-1 bg-muted/50 whitespace-nowrap">
+                          <Button 
+                            variant={selectedService === 'printing' ? 'default' : 'ghost'} 
+                            className="text-sm px-3"
+                            onClick={() => setSelectedService('printing')}
+                          >
+                            印刷
+                          </Button>
+                          <Button 
+                            variant={selectedService === 'binding' ? 'default' : 'ghost'} 
+                            className="text-sm px-3"
+                            onClick={() => setSelectedService('binding')}
+                          >
+                            製本
+                          </Button>
+                          <Button 
+                            variant={selectedService === 'logistics' ? 'default' : 'ghost'} 
+                            className="text-sm px-3"
+                            onClick={() => setSelectedService('logistics')}
+                          >
+                            物流
+                          </Button>
+                          <Button 
+                            variant={selectedService === 'eco-printing' ? 'default' : 'ghost'} 
+                            className="text-sm px-3"
+                            onClick={() => setSelectedService('eco-printing')}
+                          >
+                            環境印刷
+                          </Button>
+                          <Button 
+                            variant={selectedService === 'sdgs-consulting' ? 'default' : 'ghost'} 
+                            className="text-sm px-3"
+                            onClick={() => setSelectedService('sdgs-consulting')}
+                          >
+                            SDGs
+                          </Button>
+                          <Button 
+                            variant={selectedService === 'sustainability-report' ? 'default' : 'ghost'} 
+                            className="text-sm px-3"
+                            onClick={() => setSelectedService('sustainability-report')}
+                          >
+                            サステナビリティ
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </div>
                   
-                  {!quote ? (
-                    <PrintForm 
-                      onQuoteGenerated={handleQuoteGenerated} 
-                      serviceType={selectedService}
-                    />
-                  ) : (
-                    <QuoteDetails quote={quote} onNewQuote={handleNewQuote} />
-                  )}
+                  <div className="w-full max-w-3xl">
+                    {!quote ? (
+                      <PrintForm 
+                        onQuoteGenerated={handleQuoteGenerated} 
+                        serviceType={selectedService}
+                      />
+                    ) : (
+                      <QuoteDetails quote={quote} onNewQuote={handleNewQuote} />
+                    )}
+                  </div>
                 </div>
               </TabsContent>
               
@@ -164,8 +167,10 @@ const Index = () => {
                   "data-[state=active]:animate-fade-in"
                 )}
               >
-                <div className="flex justify-center">
-                  <AIChat initialMessage="こんにちは！印刷物に関するご質問やお見積もりのお手伝いをさせていただきます。お気軽にお問い合わせください。" />
+                <div className="flex justify-center w-full">
+                  <div className="w-full max-w-3xl">
+                    <AIChat initialMessage="こんにちは！印刷物に関するご質問やお見積もりのお手伝いをさせていただきます。お気軽にお問い合わせください。" />
+                  </div>
                 </div>
               </TabsContent>
               
@@ -177,8 +182,10 @@ const Index = () => {
                 )}
               >
                 {quote && (
-                  <div className="flex justify-center">
-                    <QuoteDetails quote={quote} onNewQuote={handleNewQuote} />
+                  <div className="flex justify-center w-full">
+                    <div className="w-full max-w-3xl">
+                      <QuoteDetails quote={quote} onNewQuote={handleNewQuote} />
+                    </div>
                   </div>
                 )}
               </TabsContent>
@@ -193,7 +200,7 @@ const Index = () => {
               </p>
             </div>
             
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {features.map((feature, index) => (
                 <div 
                   key={index}
@@ -309,7 +316,7 @@ const Index = () => {
         </div>
       </main>
       
-      <footer className="py-12 bg-secondary/30 border-t border-border/60">
+      <footer className="py-12 bg-secondary/30 border-t border-border/60 w-full">
         <div className="container max-w-7xl mx-auto px-4 md:px-6">
           <div className="grid md:grid-cols-4 gap-8">
             <div>

@@ -20,11 +20,19 @@ interface AIChatProps {
   initialMessage?: string;
   onServiceSelect?: (serviceType: ServiceType) => void;
   onQuoteGenerated?: (quote: QuoteDetails) => void;
+  initialApiConfigured?: boolean;
+  onApiConfigured?: () => void;
 }
 
-const AIChat = ({ initialMessage, onServiceSelect, onQuoteGenerated }: AIChatProps) => {
+const AIChat = ({ 
+  initialMessage, 
+  onServiceSelect, 
+  onQuoteGenerated, 
+  initialApiConfigured,
+  onApiConfigured
+}: AIChatProps) => {
   // API設定状態
-  const [isApiConfigured, setIsApiConfigured] = useState(isApiKeySet());
+  const [isApiConfigured, setIsApiConfigured] = useState(initialApiConfigured || isApiKeySet());
   
   // 多言語対応のウェルカムメッセージ
   const welcomeMessages = {
@@ -48,6 +56,12 @@ const AIChat = ({ initialMessage, onServiceSelect, onQuoteGenerated }: AIChatPro
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
   
+  // APIの設定状態をチェック
+  useEffect(() => {
+    const apiKeySet = isApiKeySet();
+    setIsApiConfigured(initialApiConfigured || apiKeySet);
+  }, [initialApiConfigured]);
+
   // サービスタイプを検出する関数
   const detectServiceType = (message: string): ServiceType => {
     const lowerMessage = message.toLowerCase();
@@ -248,10 +262,18 @@ const AIChat = ({ initialMessage, onServiceSelect, onQuoteGenerated }: AIChatPro
     });
   };
 
+  // API設定が完了した際の処理
+  const handleKeySet = () => {
+    setIsApiConfigured(true);
+    if (onApiConfigured) {
+      onApiConfigured();
+    }
+  };
+
   // API設定が完了していない場合はAPIキー入力画面を表示
   if (!isApiConfigured) {
     return (
-      <ApiKeyInput onKeySet={() => setIsApiConfigured(true)} />
+      <ApiKeyInput onKeySet={handleKeySet} />
     );
   }
 

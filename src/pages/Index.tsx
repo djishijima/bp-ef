@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import PrintForm from '@/components/PrintForm';
 import QuoteDetails from '@/components/QuoteDetails';
@@ -7,10 +7,17 @@ import AIChat from '@/components/AIChat';
 import { QuoteDetails as QuoteDetailsType, ServiceType } from '@/types';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { isApiKeySet } from '@/services/ai';
 
 const Index = () => {
   const [quote, setQuote] = useState<QuoteDetailsType | null>(null);
   const [selectedService, setSelectedService] = useState<ServiceType>('printing');
+  const [apiConfigured, setApiConfigured] = useState(isApiKeySet());
+  
+  useEffect(() => {
+    // Check if API key is set on component mount
+    setApiConfigured(isApiKeySet());
+  }, []);
   
   const handleQuoteGenerated = (newQuote: QuoteDetailsType) => {
     setQuote(newQuote);
@@ -22,6 +29,11 @@ const Index = () => {
   
   const handleServiceSelect = (serviceType: ServiceType) => {
     setSelectedService(serviceType);
+  };
+
+  // Handle API configuration completion
+  const handleApiConfigured = () => {
+    setApiConfigured(true);
   };
 
   return (
@@ -57,6 +69,8 @@ const Index = () => {
                     <AIChat 
                       onQuoteGenerated={handleQuoteGenerated} 
                       onServiceSelect={handleServiceSelect}
+                      initialApiConfigured={apiConfigured}
+                      onApiConfigured={handleApiConfigured}
                     />
                   </div>
                 </div>

@@ -50,12 +50,7 @@ const QuoteDetails = ({ quote, onNewQuote }: QuoteDetailsProps) => {
       
       // Show a visual toast with animation
       toast({
-        title: (
-          <div className="flex items-center gap-2">
-            <FileCheck className="h-5 w-5 text-green-500 animate-pulse" />
-            <span>見積書が保存されました</span>
-          </div>
-        ),
+        title: "見積書が保存されました",
         description: (
           <div className="relative">
             <div className="absolute -left-6 -top-5 h-20 w-20 bg-green-100 rounded-full opacity-20 animate-ping"></div>

@@ -9,7 +9,21 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { QuoteDetails as QuoteDetailsType } from '@/types';
-import { CheckCircle, Download, Send } from 'lucide-react';
+import { 
+  CheckCircle, 
+  Download, 
+  Send, 
+  Palette, 
+  FileType, 
+  Book, 
+  Copy, 
+  Scissors, 
+  RotateCw, 
+  Bookmark, 
+  Layers, 
+  Stamp, 
+  Sparkles
+} from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
 
@@ -59,6 +73,47 @@ const QuoteDetails = ({ quote, onNewQuote }: QuoteDetailsProps) => {
   
   const discountInfo = getDiscountAmount();
 
+  // Get icon for product type
+  const getProductTypeIcon = (type: string) => {
+    const iconMap: Record<string, React.ReactNode> = {
+      'business-card': <FileType className="h-4 w-4 mr-2 text-primary" />,
+      'flyer': <Copy className="h-4 w-4 mr-2 text-primary" />,
+      'brochure': <Book className="h-4 w-4 mr-2 text-primary" />,
+      'poster': <Layers className="h-4 w-4 mr-2 text-primary" />,
+      'booklet': <Bookmark className="h-4 w-4 mr-2 text-primary" />,
+      'postcard': <FileType className="h-4 w-4 mr-2 text-primary" />,
+      'stationery': <FileType className="h-4 w-4 mr-2 text-primary" />,
+      'other': <FileType className="h-4 w-4 mr-2 text-primary" />,
+    };
+    return iconMap[type] || <FileType className="h-4 w-4 mr-2 text-primary" />;
+  };
+
+  // Get icon for print color
+  const getPrintColorIcon = (color: string) => {
+    const iconMap: Record<string, React.ReactNode> = {
+      'black-and-white': <Palette className="h-4 w-4 mr-2 text-gray-800" />,
+      'full-color-one-side': <Palette className="h-4 w-4 mr-2 text-blue-500" />,
+      'full-color-both-sides': <Palette className="h-4 w-4 mr-2 text-indigo-500" />,
+      'spot-color': <Palette className="h-4 w-4 mr-2 text-purple-500" />,
+    };
+    return iconMap[color] || <Palette className="h-4 w-4 mr-2 text-primary" />;
+  };
+
+  // Get icon for finishing type
+  const getFinishingIcon = (finishing: string) => {
+    const iconMap: Record<string, React.ReactNode> = {
+      'none': null,
+      'folding': <RotateCw className="h-4 w-4 mr-1 text-amber-500" />,
+      'binding': <Book className="h-4 w-4 mr-1 text-amber-600" />,
+      'lamination': <Layers className="h-4 w-4 mr-1 text-blue-500" />,
+      'die-cutting': <Scissors className="h-4 w-4 mr-1 text-red-500" />,
+      'embossing': <Stamp className="h-4 w-4 mr-1 text-green-600" />,
+      'foil-stamping': <Sparkles className="h-4 w-4 mr-1 text-yellow-500" />,
+      'uv-coating': <Sparkles className="h-4 w-4 mr-1 text-purple-500" />,
+    };
+    return iconMap[finishing];
+  };
+
   return (
     <Card 
       className={cn(
@@ -90,7 +145,10 @@ const QuoteDetails = ({ quote, onNewQuote }: QuoteDetailsProps) => {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <h4 className="text-sm font-medium text-muted-foreground mb-1">商品タイプ</h4>
-              <p className="text-sm font-medium">{getProductTypeName(quote.specs.productType)}</p>
+              <p className="text-sm font-medium flex items-center">
+                {getProductTypeIcon(quote.specs.productType)}
+                {getProductTypeName(quote.specs.productType)}
+              </p>
             </div>
             <div>
               <h4 className="text-sm font-medium text-muted-foreground mb-1">サイズ</h4>
@@ -98,15 +156,24 @@ const QuoteDetails = ({ quote, onNewQuote }: QuoteDetailsProps) => {
             </div>
             <div>
               <h4 className="text-sm font-medium text-muted-foreground mb-1">数量</h4>
-              <p className="text-sm font-medium">{quote.specs.quantity}部</p>
+              <p className="text-sm font-medium flex items-center">
+                <Copy className="h-4 w-4 mr-2 text-blue-500" />
+                {quote.specs.quantity}部
+              </p>
             </div>
             <div>
               <h4 className="text-sm font-medium text-muted-foreground mb-1">用紙タイプ</h4>
-              <p className="text-sm font-medium">{getPaperTypeName(quote.specs.paperType)}</p>
+              <p className="text-sm font-medium flex items-center">
+                <Layers className="h-4 w-4 mr-2 text-gray-500" />
+                {getPaperTypeName(quote.specs.paperType)}
+              </p>
             </div>
             <div>
               <h4 className="text-sm font-medium text-muted-foreground mb-1">印刷色</h4>
-              <p className="text-sm font-medium">{getPrintColorName(quote.specs.printColors)}</p>
+              <p className="text-sm font-medium flex items-center">
+                {getPrintColorIcon(quote.specs.printColors)}
+                {getPrintColorName(quote.specs.printColors)}
+              </p>
             </div>
             <div>
               <h4 className="text-sm font-medium text-muted-foreground mb-1">納期</h4>
@@ -121,8 +188,9 @@ const QuoteDetails = ({ quote, onNewQuote }: QuoteDetailsProps) => {
                 {quote.specs.finishing.map((finish) => (
                   <div 
                     key={finish}
-                    className="px-2 py-1 bg-secondary text-xs rounded-md"
+                    className="px-2 py-1 bg-secondary text-xs rounded-md flex items-center"
                   >
+                    {getFinishingIcon(finish)}
                     {getFinishingName(finish)}
                   </div>
                 ))}

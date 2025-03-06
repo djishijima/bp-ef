@@ -42,7 +42,7 @@ export const generateAIResponse = async (messages: ChatMessage[], language: 'ja'
     };
 
     // Gemini API エンドポイント
-    const apiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
+    const apiUrl = 'https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent';
     
     const response = await fetch(`${apiUrl}?key=${apiKey}`, {
       method: 'POST',

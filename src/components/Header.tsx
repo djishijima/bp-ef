@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Menu, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -27,7 +28,7 @@ const Header = () => {
   return (
     <header 
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 py-4 transition-all duration-300 ease-out-expo",
+        "fixed top-0 left-0 right-0 z-50 py-3 transition-all duration-300 ease-out-expo",
         scrolled 
           ? "bg-white/90 backdrop-blur-md shadow-sm dark:bg-gray-900/90" 
           : "bg-transparent"
@@ -44,38 +45,44 @@ const Header = () => {
         </div>
         
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-8">
-          <a 
-            href="#form" 
-            className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors"
-          >
-            見積もりフォーム
-          </a>
-        </nav>
-        
-        <div className="flex items-center gap-4">
+        <div className="hidden md:flex items-center gap-4">
+          <nav className="flex items-center mr-4">
+            <a 
+              href="#form" 
+              className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors"
+            >
+              見積もりフォーム
+            </a>
+            <Link 
+              to="/my-page" 
+              className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors ml-6"
+            >
+              マイページ
+            </Link>
+          </nav>
+          
           <Button 
-            className="hidden md:inline-flex"
             variant="default"
+            className="whitespace-nowrap"
           >
             無料で見積もり
           </Button>
-          
-          {/* Mobile menu button */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden"
-            onClick={toggleMobileMenu}
-            aria-label="メニュー"
-          >
-            {mobileMenuOpen ? (
-              <X className="h-6 w-6" />
-            ) : (
-              <Menu className="h-6 w-6" />
-            )}
-          </Button>
         </div>
+        
+        {/* Mobile menu button */}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="md:hidden"
+          onClick={toggleMobileMenu}
+          aria-label="メニュー"
+        >
+          {mobileMenuOpen ? (
+            <X className="h-6 w-6" />
+          ) : (
+            <Menu className="h-6 w-6" />
+          )}
+        </Button>
       </div>
       
       {/* Mobile Navigation Menu */}
@@ -89,6 +96,13 @@ const Header = () => {
             >
               見積もりフォーム
             </a>
+            <Link
+              to="/my-page"
+              className="text-sm font-medium py-2 hover:text-primary transition-colors"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              マイページ
+            </Link>
             <Button 
               className="w-full mt-2"
               onClick={() => setMobileMenuOpen(false)}

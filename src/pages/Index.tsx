@@ -40,9 +40,9 @@ const Index = () => {
     <div className="min-h-screen flex flex-col bg-gray-50 w-full">
       <Header />
       
-      <main className="flex-1 px-4 py-6 md:py-10 w-full overflow-hidden">
-        <div className="container max-w-7xl mx-auto">
-          <section className="mb-6 text-center animate-fade-in">
+      <main className="flex-1 w-full overflow-x-hidden pt-20 pb-12">
+        <div className="container max-w-7xl mx-auto px-4 md:px-6">
+          <section className="mb-8 mt-4 text-center animate-fade-in">
             <div className="max-w-3xl mx-auto px-4">
               <span className="inline-block px-3 py-1 bg-secondary rounded-full text-xs font-medium text-secondary-foreground mb-3">
                 印刷業界向けAIソリューション
@@ -50,19 +50,19 @@ const Index = () => {
               <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight tracking-tight mb-3">
                 スマートな印刷見積もり
               </h1>
-              <p className="text-sm md:text-base text-muted-foreground mb-4 max-w-2xl mx-auto">
+              <p className="text-sm md:text-base text-muted-foreground mb-6 max-w-2xl mx-auto">
                 AIとの対話で簡単に見積もり。正確な見積もりをAIとの会話でスムーズに取得できます。
               </p>
             </div>
           </section>
           
           <section className="relative" id="quote-generation">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
               {/* AIチャット部分 */}
-              <div className="w-full animate-fade-in">
+              <div className="lg:col-span-6 w-full animate-fade-in">
                 <div className="bg-card rounded-lg shadow-md border border-border/60 p-4">
                   <h2 className="text-lg font-semibold mb-2">AIと会話して見積もり作成</h2>
-                  <p className="text-sm text-muted-foreground mb-3">
+                  <p className="text-sm text-muted-foreground mb-4">
                     質問に答えるだけで、最適な印刷見積もりを提案します。特別な要件や質問があればお気軽にどうぞ。
                   </p>
                   <div className="mx-auto">
@@ -77,7 +77,7 @@ const Index = () => {
               </div>
               
               {/* 見積もり部分 */}
-              <div className="w-full animate-fade-in">
+              <div className="lg:col-span-6 w-full animate-fade-in">
                 {quote ? (
                   <QuoteDetails quote={quote} onNewQuote={handleNewQuote} />
                 ) : (

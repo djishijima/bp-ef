@@ -56,7 +56,7 @@ const AIChat = ({
   };
 
   return (
-    <Card className="w-full h-[650px] flex flex-col shadow-lg border-border/60 transition-all duration-300 hover:shadow-xl">
+    <Card className="w-full h-[600px] flex flex-col shadow-lg border-border/60 transition-all duration-300 hover:shadow-xl">
       <ChatHeader 
         onClearChat={clearChat} 
         onChangeLanguage={changeLanguage} 

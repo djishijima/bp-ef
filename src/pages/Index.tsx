@@ -5,7 +5,7 @@ import Header from '@/components/Header';
 import PrintForm from '@/components/PrintForm';
 import QuoteDetails from '@/components/QuoteDetails';
 import AIChat from '@/components/AIChat';
-import { QuoteDetails as QuoteDetailsType } from '@/types';
+import { QuoteDetails as QuoteDetailsType, ServiceType } from '@/types';
 import { MessageSquare, FileText, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -13,6 +13,7 @@ import { cn } from '@/lib/utils';
 const Index = () => {
   const [activeTab, setActiveTab] = useState<string>('form');
   const [quote, setQuote] = useState<QuoteDetailsType | null>(null);
+  const [selectedService, setSelectedService] = useState<ServiceType>('printing');
   
   const handleQuoteGenerated = (newQuote: QuoteDetailsType) => {
     setQuote(newQuote);
@@ -96,8 +97,60 @@ const Index = () => {
                 )}
               >
                 <div className="flex flex-col lg:flex-row gap-6 items-start justify-center">
+                  <div className="w-full mb-6">
+                    <div className="mb-6 flex justify-center">
+                      <div className="inline-flex rounded-md border p-1 bg-muted/50">
+                        <Button 
+                          variant={selectedService === 'printing' ? 'default' : 'ghost'} 
+                          className="text-sm px-3"
+                          onClick={() => setSelectedService('printing')}
+                        >
+                          印刷
+                        </Button>
+                        <Button 
+                          variant={selectedService === 'binding' ? 'default' : 'ghost'} 
+                          className="text-sm px-3"
+                          onClick={() => setSelectedService('binding')}
+                        >
+                          製本
+                        </Button>
+                        <Button 
+                          variant={selectedService === 'logistics' ? 'default' : 'ghost'} 
+                          className="text-sm px-3"
+                          onClick={() => setSelectedService('logistics')}
+                        >
+                          物流
+                        </Button>
+                        <Button 
+                          variant={selectedService === 'eco-printing' ? 'default' : 'ghost'} 
+                          className="text-sm px-3"
+                          onClick={() => setSelectedService('eco-printing')}
+                        >
+                          環境印刷
+                        </Button>
+                        <Button 
+                          variant={selectedService === 'sdgs-consulting' ? 'default' : 'ghost'} 
+                          className="text-sm px-3"
+                          onClick={() => setSelectedService('sdgs-consulting')}
+                        >
+                          SDGs
+                        </Button>
+                        <Button 
+                          variant={selectedService === 'sustainability-report' ? 'default' : 'ghost'} 
+                          className="text-sm px-3"
+                          onClick={() => setSelectedService('sustainability-report')}
+                        >
+                          サステナビリティ
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                  
                   {!quote ? (
-                    <PrintForm onQuoteGenerated={handleQuoteGenerated} />
+                    <PrintForm 
+                      onQuoteGenerated={handleQuoteGenerated} 
+                      serviceType={selectedService}
+                    />
                   ) : (
                     <QuoteDetails quote={quote} onNewQuote={handleNewQuote} />
                   )}

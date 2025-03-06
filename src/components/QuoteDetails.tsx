@@ -22,7 +22,10 @@ import {
   Bookmark, 
   Layers, 
   Stamp, 
-  Sparkles
+  Sparkles,
+  FileCheck,
+  Receipt,
+  Printer
 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
@@ -35,6 +38,7 @@ interface QuoteDetailsProps {
 const QuoteDetails = ({ quote, onNewQuote }: QuoteDetailsProps) => {
   const { toast } = useToast();
   const [isSaving, setIsSaving] = useState(false);
+  const [isGenerated, setIsGenerated] = useState(false);
   
   const handleSaveQuote = () => {
     setIsSaving(true);
@@ -42,9 +46,26 @@ const QuoteDetails = ({ quote, onNewQuote }: QuoteDetailsProps) => {
     // Simulate API call with timeout
     setTimeout(() => {
       setIsSaving(false);
+      setIsGenerated(true);
+      
+      // Show a visual toast with animation
       toast({
-        title: "見積書が保存されました",
-        description: "お客様のメールアドレスに見積書のコピーを送信しました。",
+        title: (
+          <div className="flex items-center gap-2">
+            <FileCheck className="h-5 w-5 text-green-500 animate-pulse" />
+            <span>見積書が保存されました</span>
+          </div>
+        ),
+        description: (
+          <div className="relative">
+            <div className="absolute -left-6 -top-5 h-20 w-20 bg-green-100 rounded-full opacity-20 animate-ping"></div>
+            <div className="flex items-center gap-2 relative z-10">
+              <Receipt className="h-4 w-4 text-blue-500" />
+              <span>お客様のメールアドレスに見積書のコピーを送信しました。</span>
+            </div>
+          </div>
+        ),
+        className: "border-l-4 border-green-500 bg-gradient-to-r from-green-50 to-white",
       });
     }, 1500);
   };
@@ -119,14 +140,27 @@ const QuoteDetails = ({ quote, onNewQuote }: QuoteDetailsProps) => {
       className={cn(
         "w-full max-w-2xl mx-auto overflow-hidden",
         "shadow-lg transition-all duration-500 ease-out-expo animate-fade-in",
-        "border border-gray-200/60 hover:shadow-xl"
+        "border border-gray-200/60 hover:shadow-xl",
+        isGenerated ? "border-green-200 bg-green-50/30" : ""
       )}
     >
-      <CardHeader className="bg-secondary/40 relative overflow-hidden">
+      <CardHeader className={cn(
+        "bg-secondary/40 relative overflow-hidden",
+        isGenerated ? "bg-gradient-to-r from-green-50 to-blue-50" : ""
+      )}>
         <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent" />
+        {isGenerated && (
+          <div className="absolute top-0 right-0 m-2">
+            <div className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full flex items-center">
+              <FileCheck className="h-3 w-3 mr-1" />
+              生成済み
+            </div>
+          </div>
+        )}
         <div className="relative">
           <div className="flex items-center gap-2 mb-2">
-            <div className="px-2 py-1 bg-primary/10 text-primary text-xs font-medium rounded-full">
+            <div className="px-2 py-1 bg-primary/10 text-primary text-xs font-medium rounded-full flex items-center">
+              <Receipt className="h-3 w-3 mr-1" />
               見積書 #{quote.id}
             </div>
             <div className="text-xs text-muted-foreground">
@@ -134,7 +168,10 @@ const QuoteDetails = ({ quote, onNewQuote }: QuoteDetailsProps) => {
             </div>
           </div>
           <CardTitle className="flex items-center justify-between">
-            <span>お見積り詳細</span>
+            <span className="flex items-center">
+              <FileText className="h-5 w-5 mr-2 text-primary" />
+              お見積り詳細
+            </span>
             <span className="text-2xl font-bold">{formatPrice(quote.price)}</span>
           </CardTitle>
         </div>
@@ -251,7 +288,12 @@ const QuoteDetails = ({ quote, onNewQuote }: QuoteDetailsProps) => {
       <CardFooter className="flex flex-col gap-3 pt-2 pb-6">
         <div className="flex gap-3 w-full">
           <Button 
-            className="flex-1 bg-primary/90 hover:bg-primary transition-all duration-300"
+            className={cn(
+              "flex-1 transition-all duration-300",
+              isGenerated ? 
+                "bg-green-600 hover:bg-green-700" : 
+                "bg-primary/90 hover:bg-primary"
+            )}
             onClick={handleSaveQuote}
             disabled={isSaving}
           >
@@ -259,6 +301,11 @@ const QuoteDetails = ({ quote, onNewQuote }: QuoteDetailsProps) => {
               <>
                 <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent mr-2" />
                 保存中...
+              </>
+            ) : isGenerated ? (
+              <>
+                <Printer className="h-4 w-4 mr-2" />
+                見積書を印刷
               </>
             ) : (
               <>
@@ -285,6 +332,14 @@ const QuoteDetails = ({ quote, onNewQuote }: QuoteDetailsProps) => {
           別の見積もりを作成
         </Button>
       </CardFooter>
+      
+      {isGenerated && (
+        <div className="absolute top-1/4 right-0 -mr-10 opacity-20">
+          <div className="rotate-30 bg-green-200 p-2 rounded-lg w-40 text-green-800 text-center font-bold text-lg">
+            承認済み
+          </div>
+        </div>
+      )}
     </Card>
   );
 };

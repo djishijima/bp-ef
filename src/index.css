@@ -142,13 +142,41 @@
     will-change: transform, opacity;
   }
   
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+  
   .slide-in-from-top {
     animation-name: slideInFromTop;
+  }
+
+  .animate-slide-in {
+    animation: slideIn 0.3s ease-out forwards;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
   
   @keyframes slideInFromTop {
     from {
       transform: translateY(-1rem);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideIn {
+    from {
+      transform: translateY(10px);
       opacity: 0;
     }
     to {
@@ -174,15 +202,16 @@
   width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
 }
 
 .service-selector-container::-webkit-scrollbar {
-  height: 4px;
+  height: 3px;
 }
 
 .service-selector-container::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0.1);
-  border-radius: 4px;
+  border-radius: 3px;
 }
 
 .service-selector-container::-webkit-scrollbar-track {
@@ -192,7 +221,7 @@
 /* Responsive container fixes */
 @media (max-width: 640px) {
   .container {
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
   }
 }

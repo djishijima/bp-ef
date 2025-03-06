@@ -56,7 +56,7 @@ const AIChat = ({
   };
 
   return (
-    <Card className="w-full h-[600px] flex flex-col shadow-lg animate-fade-in transition-all duration-300 hover:shadow-xl overflow-hidden">
+    <Card className="w-full h-[650px] flex flex-col shadow-lg border-border/60 transition-all duration-300 hover:shadow-xl">
       <ChatHeader 
         onClearChat={clearChat} 
         onChangeLanguage={changeLanguage} 
@@ -67,7 +67,7 @@ const AIChat = ({
         <ChatMessageList messages={messages} isTyping={isTyping} />
       </CardContent>
       
-      <CardFooter className="p-4 pt-2 border-t flex flex-col gap-2">
+      <CardFooter className="p-3 border-t flex flex-col gap-2">
         <ChatInput 
           onSendMessage={sendMessage}
           isTyping={isTyping}

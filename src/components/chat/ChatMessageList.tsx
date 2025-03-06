@@ -23,16 +23,17 @@ const ChatMessageList = ({ messages, isTyping }: ChatMessageListProps) => {
   };
   
   useEffect(() => {
+    // メッセージが更新されたら自動的に一番下にスクロール
     const timeoutId = setTimeout(() => {
       scrollToBottom();
-    }, 100); // 少し遅延させてDOMの更新を確実に捉える
+    }, 50);
     
     return () => clearTimeout(timeoutId);
   }, [messages, isTyping]);
 
   return (
-    <ScrollArea className="h-full py-4 px-4" ref={scrollAreaRef}>
-      <div className="space-y-4 min-h-[400px]">
+    <ScrollArea className="h-full px-4 py-3" ref={scrollAreaRef}>
+      <div className="space-y-4 min-h-[450px] pb-2">
         {messages.map((message) => (
           <ChatMessage key={message.id} message={message} />
         ))}

@@ -10,16 +10,18 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { ChatMessage, ServiceType } from '@/types';
-import { SendIcon, Bot, User, RefreshCcw } from 'lucide-react';
+import { ChatMessage, QuoteDetails, ServiceType } from '@/types';
+import { SendIcon, Bot, User, RefreshCcw, Download } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useToast } from '@/hooks/use-toast';
 
 interface AIChatProps {
   initialMessage?: string;
   onServiceSelect?: (serviceType: ServiceType) => void;
+  onQuoteGenerated?: (quote: QuoteDetails) => void;
 }
 
-const AIChat = ({ initialMessage, onServiceSelect }: AIChatProps) => {
+const AIChat = ({ initialMessage, onServiceSelect, onQuoteGenerated }: AIChatProps) => {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: '1',
@@ -30,7 +32,17 @@ const AIChat = ({ initialMessage, onServiceSelect }: AIChatProps) => {
   ]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [language, setLanguage] = useState<'ja' | 'en' | 'zh' | 'ko'>('ja');
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const { toast } = useToast();
+  
+  // 多言語対応のウェルカムメッセージ
+  const welcomeMessages = {
+    ja: 'こんにちは！印刷、製本、物流、環境印刷に関するご質問やお見積もりのお手伝いをさせていただきます。お気軽にお問い合わせください。',
+    en: 'Hello! I can help you with printing, binding, logistics, and eco-friendly printing services. Feel free to ask any questions or request a quote.',
+    zh: '您好！我可以帮助您解决印刷、装订、物流和环保印刷服务的问题。欢迎随时提问或索取报价。',
+    ko: '안녕하세요! 인쇄, 제본, 물류 및 친환경 인쇄 서비스에 관한 문의나 견적에 도움을 드릴 수 있습니다. 언제든지 질문해 주세요.'
+  };
   
   // 各サービスタイプに関する回答
   const aiResponses: Record<string, Record<string, string>> = {
@@ -257,6 +269,28 @@ const AIChat = ({ initialMessage, onServiceSelect }: AIChatProps) => {
       
       setMessages((prev) => [...prev, aiMessage]);
       setIsTyping(false);
+      
+      // 仮の見積もり生成 (実際のアプリでは適切なタイミングで生成)
+      if (onQuoteGenerated && input.includes('見積') || input.includes('quote') || input.includes('estimate')) {
+        // サンプルの見積もりデータを生成
+        const sampleQuote: QuoteDetails = {
+          id: `QT-${Date.now()}`,
+          specs: {
+            serviceType: detectServiceType(input),
+            productType: 'チラシ',
+            size: 'A4',
+            quantity: 1000,
+            paperType: '上質紙 110kg',
+            printColors: '4色カラー',
+            finishing: ['折り加工'],
+            customSpecs: input,
+          },
+          price: 45000,
+          turnaround: 5
+        };
+        
+        onQuoteGenerated(sampleQuote);
+      }
     }, 1000 + Math.random() * 2000); // 1〜3秒のランダムな遅延
   };
   
@@ -271,11 +305,69 @@ const AIChat = ({ initialMessage, onServiceSelect }: AIChatProps) => {
     setMessages([
       {
         id: Date.now().toString(),
-        content: 'こんにちは！印刷、製本、物流、環境印刷に関するご質問やお見積もりのお手伝いをさせていただきます。お気軽にお問い合わせください。',
+        content: welcomeMessages[language],
         sender: 'ai',
         timestamp: new Date(),
       },
     ]);
+  };
+
+  // 言語切替関数
+  const changeLanguage = (lang: 'ja' | 'en' | 'zh' | 'ko') => {
+    setLanguage(lang);
+    setMessages([
+      {
+        id: Date.now().toString(),
+        content: welcomeMessages[lang],
+        sender: 'ai',
+        timestamp: new Date(),
+      },
+    ]);
+  };
+  
+  // チャット履歴をエクスポート
+  const exportChatHistory = () => {
+    // 会話内容をテキスト形式に整形
+    const formatDate = (date: Date) => {
+      return new Intl.DateTimeFormat('ja-JP', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+      }).format(date);
+    };
+    
+    const chatText = messages.map(msg => {
+      const sender = msg.sender === 'user' ? 'お客様' : 'AIアシスタント';
+      return `[${formatDate(msg.timestamp)}] ${sender}:\n${msg.content}\n`;
+    }).join('\n');
+    
+    // ファイル名を生成（現在の日時を含む）
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-').substring(0, 19);
+    const filename = `chat-history-${timestamp}.txt`;
+    
+    // Blobとしてファイルを作成
+    const blob = new Blob([chatText], { type: 'text/plain;charset=utf-8' });
+    
+    // ダウンロードリンクを作成して自動クリック
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    
+    // クリーンアップ
+    setTimeout(() => {
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }, 100);
+    
+    toast({
+      title: "エクスポート完了",
+      description: "チャット履歴を保存しました。",
+    });
   };
 
   return (
@@ -286,15 +378,51 @@ const AIChat = ({ initialMessage, onServiceSelect }: AIChatProps) => {
             <Bot className="h-5 w-5 text-primary" />
             AI印刷アシスタント
           </CardTitle>
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className="h-8 w-8 rounded-full"
-            onClick={handleClearChat}
-          >
-            <RefreshCcw className="h-4 w-4" />
-            <span className="sr-only">チャットをリセット</span>
-          </Button>
+          <div className="flex items-center gap-2">
+            <div className="flex border rounded-md overflow-hidden text-xs">
+              <Button 
+                variant={language === 'ja' ? 'default' : 'ghost'} 
+                size="sm" 
+                className="px-2 py-1 h-7 text-xs"
+                onClick={() => changeLanguage('ja')}
+              >
+                日本語
+              </Button>
+              <Button 
+                variant={language === 'en' ? 'default' : 'ghost'} 
+                size="sm" 
+                className="px-2 py-1 h-7 text-xs"
+                onClick={() => changeLanguage('en')}
+              >
+                English
+              </Button>
+              <Button 
+                variant={language === 'zh' ? 'default' : 'ghost'} 
+                size="sm" 
+                className="px-2 py-1 h-7 text-xs"
+                onClick={() => changeLanguage('zh')}
+              >
+                中文
+              </Button>
+              <Button 
+                variant={language === 'ko' ? 'default' : 'ghost'} 
+                size="sm" 
+                className="px-2 py-1 h-7 text-xs"
+                onClick={() => changeLanguage('ko')}
+              >
+                한국어
+              </Button>
+            </div>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="h-8 w-8 rounded-full"
+              onClick={handleClearChat}
+            >
+              <RefreshCcw className="h-4 w-4" />
+              <span className="sr-only">チャットをリセット</span>
+            </Button>
+          </div>
         </div>
       </CardHeader>
       
@@ -353,31 +481,49 @@ const AIChat = ({ initialMessage, onServiceSelect }: AIChatProps) => {
       </CardContent>
       
       <CardFooter className="p-4 pt-2 border-t">
-        <form 
-          className="flex items-center w-full gap-2"
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSendMessage();
-          }}
-        >
-          <Input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={handleInputKeyDown}
-            placeholder="メッセージを入力..."
-            className="flex-1 transition-all duration-200 focus-visible:ring-1"
-            disabled={isTyping}
-          />
-          <Button 
-            type="submit" 
-            size="icon" 
-            disabled={!input.trim() || isTyping}
-            className="h-9 w-9 rounded-full shrink-0 transition-all duration-300"
+        <div className="w-full">
+          <form 
+            className="flex items-center w-full gap-2 mb-2"
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSendMessage();
+            }}
           >
-            <SendIcon className="h-4 w-4" />
-            <span className="sr-only">送信</span>
-          </Button>
-        </form>
+            <Input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleInputKeyDown}
+              placeholder={language === 'ja' ? 'メッセージを入力...' : 
+                          language === 'en' ? 'Type a message...' : 
+                          language === 'zh' ? '输入消息...' : '메시지를 입력하세요...'}
+              className="flex-1 transition-all duration-200 focus-visible:ring-1"
+              disabled={isTyping}
+            />
+            <Button 
+              type="submit" 
+              size="icon" 
+              disabled={!input.trim() || isTyping}
+              className="h-9 w-9 rounded-full shrink-0 transition-all duration-300"
+            >
+              <SendIcon className="h-4 w-4" />
+              <span className="sr-only">送信</span>
+            </Button>
+          </form>
+          
+          {messages.length > 1 && (
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full flex items-center justify-center gap-2 text-xs"
+              onClick={exportChatHistory}
+            >
+              <Download className="h-3 w-3" />
+              {language === 'ja' ? 'チャット履歴をエクスポート' : 
+               language === 'en' ? 'Export Chat History' : 
+               language === 'zh' ? '导出聊天记录' : '채팅 기록 내보내기'}
+            </Button>
+          )}
+        </div>
       </CardFooter>
     </Card>
   );

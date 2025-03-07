@@ -57,12 +57,12 @@ const Index = () => {
           </section>
           
           <section className="relative" id="quote-generation">
-            <div className="flex flex-col items-center gap-6">
+            <div className="flex flex-col items-center">
               {/* AIチャット部分 */}
-              <div className="w-full max-w-3xl animate-fade-in">
-                <div className="bg-card rounded-lg shadow-md border border-border/60 p-4">
-                  <h2 className="text-lg font-semibold mb-2">AIと会話して見積もり作成</h2>
-                  <p className="text-sm text-muted-foreground mb-4">
+              <div className="w-full max-w-2xl mx-auto animate-fade-in">
+                <div className="bg-card rounded-lg shadow-md border border-border/60 p-6">
+                  <h2 className="text-lg font-semibold mb-2 text-center">AIと会話して見積もり作成</h2>
+                  <p className="text-sm text-muted-foreground mb-4 text-center">
                     質問に答えるだけで、最適な印刷見積もりを提案します。特別な要件や質問があればお気軽にどうぞ。
                   </p>
                   <div className="mx-auto">
@@ -76,66 +76,12 @@ const Index = () => {
                 </div>
               </div>
               
-              {/* 見積もり部分 */}
-              <div className="w-full max-w-3xl animate-fade-in">
-                {quote ? (
+              {/* 見積もり結果表示部分 */}
+              {quote && (
+                <div className="w-full max-w-2xl mx-auto mt-6 animate-fade-in">
                   <QuoteDetails quote={quote} onNewQuote={handleNewQuote} />
-                ) : (
-                  <div className="bg-card rounded-lg shadow-md border border-border/60 p-4">
-                    <div className="mb-4">
-                      <div className="mb-3 flex justify-center">
-                        <div className="service-selector-container">
-                          <div className="inline-flex rounded-md border p-1 bg-muted/50 whitespace-nowrap overflow-x-auto">
-                            <Button 
-                              variant={selectedService === 'printing' ? 'default' : 'ghost'} 
-                              className="text-xs px-2 py-1"
-                              onClick={() => setSelectedService('printing')}
-                            >
-                              印刷
-                            </Button>
-                            <Button 
-                              variant={selectedService === 'binding' ? 'default' : 'ghost'} 
-                              className="text-xs px-2 py-1"
-                              onClick={() => setSelectedService('binding')}
-                            >
-                              製本
-                            </Button>
-                            <Button 
-                              variant={selectedService === 'logistics' ? 'default' : 'ghost'} 
-                              className="text-xs px-2 py-1"
-                              onClick={() => setSelectedService('logistics')}
-                            >
-                              物流
-                            </Button>
-                            <Button 
-                              variant={selectedService === 'eco-printing' ? 'default' : 'ghost'} 
-                              className="text-xs px-2 py-1"
-                              onClick={() => setSelectedService('eco-printing')}
-                            >
-                              環境印刷
-                            </Button>
-                            <Button 
-                              variant={selectedService === 'SDGs-consulting' ? 'default' : 'ghost'} 
-                              className="text-xs px-2 py-1"
-                              onClick={() => setSelectedService('SDGs-consulting')}
-                            >
-                              SDGs
-                            </Button>
-                            <Button 
-                              variant={selectedService === 'sustainability-report' ? 'default' : 'ghost'} 
-                              className="text-xs px-2 py-1"
-                              onClick={() => setSelectedService('sustainability-report')}
-                            >
-                              サステナ
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    {/* PrintForm component removed as requested */}
-                  </div>
-                )}
-              </div>
+                </div>
+              )}
             </div>
           </section>
         </div>

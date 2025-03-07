@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ShieldCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Header = () => {
@@ -34,7 +34,7 @@ const Header = () => {
           : "bg-transparent"
       )}
     >
-      <div className="container max-w-7xl mx-auto px-4 flex items-center justify-between">
+      <div className="container max-w-7xl mx-auto px-4 flex items-center justify-center">
         <div className="flex items-center gap-2">
           <div className="w-10 h-10 rounded-md bg-primary flex items-center justify-center">
             <span className="text-primary-foreground font-bold text-base">文</span>
@@ -44,14 +44,17 @@ const Header = () => {
           </h1>
         </div>
         
-        {/* Desktop Navigation */}
+        {/* ヘッダー右側 - 管理者リンク */}
         <div className="hidden md:flex items-center gap-4">
-          <Button 
-            variant="default"
-            className="whitespace-nowrap"
-          >
-            無料で見積もり
-          </Button>
+          <Link to="/admin">
+            <Button 
+              variant="ghost"
+              className="whitespace-nowrap flex items-center gap-1"
+            >
+              <ShieldCheck className="h-4 w-4" />
+              管理者ページ
+            </Button>
+          </Link>
         </div>
         
         {/* Mobile menu button */}
@@ -70,16 +73,21 @@ const Header = () => {
         </Button>
       </div>
       
-      {/* Mobile Navigation Menu */}
+      {/* Mobile Navigation Menu - ボタン削除済み */}
       {mobileMenuOpen && (
         <div className="md:hidden bg-background border-b border-border/60 px-4 py-5 animate-in slide-in-from-top">
           <nav className="flex flex-col space-y-4">
-            <Button 
-              className="w-full mt-2"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              無料で見積もり
-            </Button>
+            {/* モバイルナビゲーション */}
+            <Link to="/admin">
+              <Button 
+                className="w-full"
+                variant="ghost"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <ShieldCheck className="h-4 w-4 mr-2" />
+                管理者ページ
+              </Button>
+            </Link>
           </nav>
         </div>
       )}

@@ -1,6 +1,6 @@
 
 // AIサービスのインターフェース
-import { ChatMessage } from '@/types';
+import type { ChatMessage } from '@/types';
 
 // API Keyの一時保存用
 let tempApiKey: string | null = null;

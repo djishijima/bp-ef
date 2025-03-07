@@ -15,6 +15,7 @@ import {
   Receipt
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { saveQuote } from '@/services/quotes';
 import { cn } from '@/lib/utils';
 import ProductSpecs from './quote/ProductSpecs';
 import PriceSummary from './quote/PriceSummary';
@@ -31,15 +32,15 @@ const QuoteDetails = ({ quote, onNewQuote }: QuoteDetailsProps) => {
   const [isSaving, setIsSaving] = useState(false);
   const [isGenerated, setIsGenerated] = useState(false);
   
-  const handleSaveQuote = () => {
+  const handleSaveQuote = async () => {
     setIsSaving(true);
     
-    // Simulate API call with timeout
-    setTimeout(() => {
-      setIsSaving(false);
+    try {
+      // 実際にデータを保存する
+      await saveQuote(quote);
       setIsGenerated(true);
       
-      // Show a visual toast with animation
+      // 保存成功のトースト通知
       toast({
         title: "見積書が保存されました",
         description: (
@@ -47,13 +48,23 @@ const QuoteDetails = ({ quote, onNewQuote }: QuoteDetailsProps) => {
             <div className="absolute -left-6 -top-5 h-20 w-20 bg-green-100 rounded-full opacity-20 animate-ping"></div>
             <div className="flex items-center gap-2 relative z-10">
               <Receipt className="h-4 w-4 text-blue-500" />
-              <span>お客様のメールアドレスに見積書のコピーを送信しました。</span>
+              <span>見積もりデータが保存され、管理者ページで確認できるようになりました。</span>
             </div>
           </div>
         ),
         className: "border-l-4 border-green-500 bg-gradient-to-r from-green-50 to-white",
       });
-    }, 1500);
+    } catch (error) {
+      // エラー通知
+      toast({
+        variant: "destructive",
+        title: "保存エラー",
+        description: "見積もりの保存中にエラーが発生しました。",
+      });
+      console.error("見積もり保存エラー:", error);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (

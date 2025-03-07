@@ -1,5 +1,5 @@
 
-export type ServiceType = 'printing' | 'binding' | 'logistics' | 'eco-printing' | 'sdgs-consulting' | 'sustainability-report';
+export type ServiceType = 'printing' | 'binding' | 'logistics' | 'eco-printing' | 'SDGs-consulting' | 'sustainability-report';
 
 export type PrintSpecs = {
   serviceType: ServiceType;

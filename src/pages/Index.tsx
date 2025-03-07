@@ -4,7 +4,7 @@ import Header from '@/components/Header';
 import PrintForm from '@/components/PrintForm';
 import QuoteDetails from '@/components/QuoteDetails';
 import AIChat from '@/components/AIChat';
-import { QuoteDetails as QuoteDetailsType, ServiceType } from '@/types';
+import type { QuoteDetails as QuoteDetailsType, ServiceType } from '@/types';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { isApiKeySet } from '@/services/ai';
@@ -57,9 +57,9 @@ const Index = () => {
           </section>
           
           <section className="relative" id="quote-generation">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <div className="flex flex-col items-center gap-6">
               {/* AIチャット部分 */}
-              <div className="lg:col-span-6 w-full animate-fade-in">
+              <div className="w-full max-w-3xl animate-fade-in">
                 <div className="bg-card rounded-lg shadow-md border border-border/60 p-4">
                   <h2 className="text-lg font-semibold mb-2">AIと会話して見積もり作成</h2>
                   <p className="text-sm text-muted-foreground mb-4">
@@ -77,7 +77,7 @@ const Index = () => {
               </div>
               
               {/* 見積もり部分 */}
-              <div className="lg:col-span-6 w-full animate-fade-in">
+              <div className="w-full max-w-3xl animate-fade-in">
                 {quote ? (
                   <QuoteDetails quote={quote} onNewQuote={handleNewQuote} />
                 ) : (
@@ -115,9 +115,9 @@ const Index = () => {
                               環境印刷
                             </Button>
                             <Button 
-                              variant={selectedService === 'sdgs-consulting' ? 'default' : 'ghost'} 
+                              variant={selectedService === 'SDGs-consulting' ? 'default' : 'ghost'} 
                               className="text-xs px-2 py-1"
-                              onClick={() => setSelectedService('sdgs-consulting')}
+                              onClick={() => setSelectedService('SDGs-consulting')}
                             >
                               SDGs
                             </Button>
@@ -132,10 +132,7 @@ const Index = () => {
                         </div>
                       </div>
                     </div>
-                    <PrintForm 
-                      onQuoteGenerated={handleQuoteGenerated} 
-                      serviceType={selectedService}
-                    />
+                    {/* PrintForm component removed as requested */}
                   </div>
                 )}
               </div>
